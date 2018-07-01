@@ -18,7 +18,7 @@ public interface EntryDao {
     List<Entry> getAll();
 
     @Query("SELECT * FROM entries WHERE id=:id")
-    Entry getOne(String id);
+    Entry getOne(int id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void save(Entry entry);
