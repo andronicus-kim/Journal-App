@@ -94,6 +94,7 @@ public class AddNewEntryActivity extends AppCompatActivity implements DatePicker
                 Toast.makeText(this, "Some fields are empty!", Toast.LENGTH_SHORT).show();
             }
             saveEntry(new Entry(title,description,mDate));
+            finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
