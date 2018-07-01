@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.andronicus.journalapp.EntryDetailsActivity;
 import com.andronicus.journalapp.R;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -21,6 +23,7 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
 
     private Context mContext;
     private List<Entry> mEntries;
+    private long mDate = Long.MAX_VALUE;
     public EntryAdapter(Context context, List<Entry> entries){
         mContext = context;
         mEntries = entries;
@@ -43,23 +46,19 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
     }
 
     public void swap(List<Entry> entries){
-        if (mEntries == null || mEntries.size() == 0){
-            mEntries = entries;
-            notifyDataSetChanged();
-        }
+        mEntries = entries;
+        notifyDataSetChanged();
     }
 
     public class EntryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private TextView mMonthTextview;
-        private TextView mDayTextview;
+        private TextView mDateTextview;
         private TextView mTitleTextview;
         private TextView mDescTextview;
         public EntryViewHolder(View view) {
             super(view);
             view.setOnClickListener(this);
-            mMonthTextview = view.findViewById(R.id.month_textview);
-            mDayTextview = view.findViewById(R.id.day_textview);
+            mDateTextview = view.findViewById(R.id.date_textview);
             mTitleTextview = view.findViewById(R.id.title_textview);
             mDescTextview = view.findViewById(R.id.desc_textview);
         }
@@ -69,12 +68,12 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
             mContext.startActivity(EntryDetailsActivity.newIntent(mContext));
         }
         public void bind(Entry entry){
-            String date = DateUtils.getRelativeTimeSpanString(mContext,entry.getDate()).toString();
-            String[] array = date.split("");
-            String month = array[0];
-            String day = array[1];
-            mMonthTextview.setText(month);
-            mDayTextview.setText(day);
+            if (entry.getDate() == mDate){
+                mDateTextview.setText(R.string.date_empty);
+            }else {
+                CharSequence date = DateUtils.getRelativeTimeSpanString(mContext,entry.getDate());
+                mDateTextview.setText(date);
+            }
             mTitleTextview.setText(entry.getTitle());
             mDescTextview.setText(entry.getDescription());
         }
