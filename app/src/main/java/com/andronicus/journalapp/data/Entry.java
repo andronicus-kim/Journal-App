@@ -1,4 +1,4 @@
-package com.andronicus.journalapp;
+package com.andronicus.journalapp.data;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;

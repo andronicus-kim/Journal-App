@@ -1,4 +1,4 @@
-package com.andronicus.journalapp;
+package com.andronicus.journalapp.data;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
