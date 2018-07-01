@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +25,7 @@ public class EntriesActivity extends AppCompatActivity implements View.OnClickLi
     public static final int ENTRIES_LOADER = 1;
     private RecyclerView mRecyclerView;
     private EntryAdapter mAdapter;
+    private List<Entry> mEntries;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,19 +41,47 @@ public class EntriesActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View view) {
-        startActivity(AddNewEntryActivity.newIntent(EntriesActivity.this));
+        startActivity(AddNewEntryActivity.newIntent(EntriesActivity.this,null));
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.entries,menu);
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                List<Entry> filteredEntries = filter(mEntries,newText);
+                mAdapter.setFilter(filteredEntries);
+                mRecyclerView.scrollToPosition(0);
+                mAdapter.notifyDataSetChanged();
+                return true;
+            }
+        });
         return true;
+    }
+
+    private List<Entry> filter(List<Entry> entries, String newText) {
+        String convertedToLowerCase = newText.toLowerCase();
+        List<Entry> filteredList = new ArrayList<>();
+        for (Entry entry: entries){
+            String title = entry.getTitle().toLowerCase();
+            if (title.contains(convertedToLowerCase)){
+                filteredList.add(entry);
+            }
+        }
+        return filteredList;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_search){
-            Toast.makeText(this, "Searching...", Toast.LENGTH_SHORT).show();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -71,6 +101,7 @@ public class EntriesActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onLoadFinished(Loader<List<Entry>> loader, List<Entry> entries) {
         mAdapter.swap(entries);
+        mEntries = entries;
     }
 
     @Override

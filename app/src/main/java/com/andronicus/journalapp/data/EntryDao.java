@@ -1,6 +1,7 @@
 package com.andronicus.journalapp.data;
 
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
@@ -24,5 +25,8 @@ public interface EntryDao {
     void save(Entry entry);
 
     @Update
-    int update(Entry entry);
+    void update(Entry entry);
+
+    @Delete
+    void delete(Entry entry);
 }

@@ -50,6 +50,12 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
         notifyDataSetChanged();
     }
 
+    public void setFilter(List<Entry> filteredEntries) {
+        mEntries = new ArrayList<>();
+        mEntries.addAll(filteredEntries);
+        notifyDataSetChanged();
+    }
+
     public class EntryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private TextView mDateTextview;
@@ -65,7 +71,7 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
 
         @Override
         public void onClick(View view) {
-            mContext.startActivity(EntryDetailsActivity.newIntent(mContext));
+            mContext.startActivity(EntryDetailsActivity.newIntent(mContext,mEntries.get(getAdapterPosition())));
         }
         public void bind(Entry entry){
             if (entry.getDate() == mDate){

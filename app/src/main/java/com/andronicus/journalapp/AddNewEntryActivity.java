@@ -1,7 +1,6 @@
 package com.andronicus.journalapp;
 
 import android.app.DatePickerDialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
@@ -24,14 +23,19 @@ import java.util.Calendar;
 
 public class AddNewEntryActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,View.OnClickListener{
 
+    public static final String ENTRY = "ENTRY";
+
+    private Entry mEntry;
     private TextInputEditText mTitleEditText;
     private TextInputEditText mDescEditText;
-    private RelativeLayout mDateLyout;
+    private RelativeLayout mDateLayout;
     private TextView mDateTextView;
     private long mDate = Long.MAX_VALUE;
 
-    public static Intent newIntent(Context context){
-        return new Intent(context,AddNewEntryActivity.class);
+    public static Intent newIntent(Context context,Entry entry){
+        Intent intent = new Intent(context,AddNewEntryActivity.class);
+        intent.putExtra(ENTRY,entry);
+        return intent;
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +44,15 @@ public class AddNewEntryActivity extends AppCompatActivity implements DatePicker
         mDateTextView = findViewById(R.id.date_textview);
         mTitleEditText = findViewById(R.id.title_edittext);
         mDescEditText = findViewById(R.id.desc_edittext);
-        mDateLyout = findViewById(R.id.date_layout);
-        mDateLyout.setOnClickListener(this);
+        mDateLayout = findViewById(R.id.date_layout);
+        mDateLayout.setOnClickListener(this);
+
+        mEntry = getIntent().getParcelableExtra(ENTRY);
+        if (mEntry != null){
+           mDate = mEntry.getDate();
+           mTitleEditText.setText(mEntry.getTitle());
+           mDescEditText.setText(mEntry.getDescription());
+        }
         updateDateDisplay();
     }
 
@@ -93,9 +104,18 @@ public class AddNewEntryActivity extends AppCompatActivity implements DatePicker
             if (title.isEmpty() || description.isEmpty()){
                 Toast.makeText(this, "Some fields are empty!", Toast.LENGTH_SHORT).show();
             }
-            saveEntry(new Entry(title,description,mDate));
-            finish();
-            return true;
+            if (mEntry != null){
+                mEntry.setDate(mDate);
+                mEntry.setTitle(title);
+                mEntry.setDescription(description);
+                updateEntry(mEntry);
+                finish();
+                return true;
+            }else {
+                saveEntry(new Entry(title,description,mDate));
+                finish();
+                return true;
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -105,6 +125,14 @@ public class AddNewEntryActivity extends AppCompatActivity implements DatePicker
             @Override
             public void run() {
                 JournalApp.getEntryDao().save(entry);
+            }
+        });
+    }
+    private void updateEntry(final Entry entry) {
+        new AppExecutors().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                JournalApp.getEntryDao().update(entry);
             }
         });
     }

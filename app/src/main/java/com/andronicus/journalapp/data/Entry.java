@@ -4,12 +4,14 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Created by andronicus on 7/1/2018.
  */
 @Entity(tableName = "entries")
-public class Entry {
+public class Entry implements Parcelable{
 
     public static final long NO_DATE = Long.MAX_VALUE;
 
@@ -39,6 +41,26 @@ public class Entry {
         mDescription = description;
         mDate = date;
     }
+
+    @Ignore
+    protected Entry(Parcel in) {
+        mId = in.readInt();
+        mTitle = in.readString();
+        mDescription = in.readString();
+        mDate = in.readLong();
+    }
+
+    public static final Creator<Entry> CREATOR = new Creator<Entry>() {
+        @Override
+        public Entry createFromParcel(Parcel in) {
+            return new Entry(in);
+        }
+
+        @Override
+        public Entry[] newArray(int size) {
+            return new Entry[size];
+        }
+    };
 
     public int getId() {
         return mId;
@@ -70,5 +92,18 @@ public class Entry {
 
     public void setDate(long date) {
         mDate = date;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(mId);
+        parcel.writeString(mTitle);
+        parcel.writeString(mDescription);
+        parcel.writeLong(mDate);
     }
 }
