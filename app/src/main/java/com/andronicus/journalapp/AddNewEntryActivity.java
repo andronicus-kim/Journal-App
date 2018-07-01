@@ -1,17 +1,23 @@
 package com.andronicus.journalapp;
 
 import android.app.DatePickerDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.andronicus.journalapp.data.Entry;
+import com.andronicus.journalapp.utils.AppExecutors;
 import com.andronicus.journalapp.utils.DatePickerFragment;
 
 import java.util.Calendar;
@@ -71,5 +77,34 @@ public class AddNewEntryActivity extends AppCompatActivity implements DatePicker
             CharSequence date = DateUtils.getRelativeTimeSpanString(AddNewEntryActivity.this,mDate);
             mDateTextView.setText(date);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.add_entry,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_save){
+            String title = mTitleEditText.getText().toString().trim();
+            String description = mDescEditText.getText().toString().trim();
+            if (title.isEmpty() || description.isEmpty()){
+                Toast.makeText(this, "Some fields are empty!", Toast.LENGTH_SHORT).show();
+            }
+            saveEntry(new Entry(title,description,mDate));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void saveEntry(final Entry entry) {
+        new AppExecutors().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                JournalApp.getEntryDao().save(entry);
+            }
+        });
     }
 }
