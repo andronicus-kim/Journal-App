@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Journal App</string>
     <string name="date_empty">Not Set</string>
+    <string name="save">SAVE</string>
+    <string name="edit">EDIT</string>
+    <string name="delete">DELETE</string>
 </resources>
