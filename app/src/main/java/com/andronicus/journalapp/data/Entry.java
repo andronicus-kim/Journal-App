@@ -2,6 +2,7 @@ package com.andronicus.journalapp.data;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 /**
@@ -14,7 +15,7 @@ public class Entry {
 
     @ColumnInfo(name = "id")
     @PrimaryKey(autoGenerate = true)
-    private String mId;
+    private int mId;
 
     @ColumnInfo(name = "title")
     private String mTitle;
@@ -25,11 +26,25 @@ public class Entry {
     @ColumnInfo(name = "date")
     private long mDate;
 
-    public String getId() {
+    public Entry(int id, String title, String description, long date) {
+        mId = id;
+        mTitle = title;
+        mDescription = description;
+        mDate = date;
+    }
+
+    @Ignore
+    public Entry(String title, String description, long date) {
+        mTitle = title;
+        mDescription = description;
+        mDate = date;
+    }
+
+    public int getId() {
         return mId;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         mId = id;
     }
 
