@@ -10,18 +10,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EntriesActivity">
+        <activity android:name=".SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".AddNewEntryActivity"
+        <activity
+            android:name=".AddNewEntryActivity"
             android:parentActivityName=".EntriesActivity">
         </activity>
-        <activity android:name=".EntryDetailsActivity"
+        <activity
+            android:name=".EntryDetailsActivity"
             android:parentActivityName=".EntriesActivity"/>
+        <activity android:name=".EntriesActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -1,6 +1,8 @@
 package com.andronicus.journalapp;
 
 import android.app.LoaderManager;
+import android.content.Context;
+import android.content.Intent;
 import android.content.Loader;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +28,11 @@ public class EntriesActivity extends AppCompatActivity implements View.OnClickLi
     private RecyclerView mRecyclerView;
     private EntryAdapter mAdapter;
     private List<Entry> mEntries;
+
+    public static Intent newIntent(Context context){
+        return new Intent(context,EntriesActivity.class);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

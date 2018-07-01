@@ -5,4 +5,5 @@
     <string name="edit">EDIT</string>
     <string name="delete">DELETE</string>
     <string name="search">SEARCH</string>
+    <string name="signed_out">Signed Out</string>
 </resources>

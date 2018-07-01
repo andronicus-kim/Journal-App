@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/color_signing_background"
+    tools:context=".SignInActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_marginTop="72dp"
+            android:scaleType="centerCrop"
+            android:layout_width="120dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/user"
+            android:layout_height="120dp"/>
+        <TextView
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/color_white"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-condensed"
+            android:text="@string/signed_out"/>
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/btn_sign_in"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="150dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"/>
+    </LinearLayout>
+
+</ScrollView>

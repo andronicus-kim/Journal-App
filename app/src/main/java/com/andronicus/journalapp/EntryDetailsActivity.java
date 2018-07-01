@@ -41,7 +41,8 @@ public class EntryDetailsActivity extends AppCompatActivity {
                 CharSequence date = DateUtils.getRelativeTimeSpanString(this,mEntry.getDate());
                 mDateTextview.setText(date);
             }
-            mTitleTextview.setText(mEntry.getTitle());
+            String title = "# " + mEntry.getTitle();
+            mTitleTextview.setText(title);
             mDescTextview.setText(mEntry.getDescription());
         }
     }
